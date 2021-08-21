@@ -9,6 +9,8 @@ const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
 const cors = require('cors');
 
+const errorHandler = require('./middleware/error');
+
 //Load enviromnent variables
 dotenv.config({ path: './config/config.env' });
 
@@ -17,6 +19,9 @@ const auth = require('./router/auth');
 const calorie = require('./router/calorie');
 
 const app = express();
+
+//Body Parser
+app.use(express.json());
 
 //Developer loading middleware
 if (process.env.NODE_ENV === 'development') {
@@ -42,6 +47,12 @@ app.use(hpp());
 
 //Enable CORS
 app.use(cors());
+
+//Mount router
+app.use('/api/v1/auth', auth);
+app.use('/api/v1/calorie', calorie);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
