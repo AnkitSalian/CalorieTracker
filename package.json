@@ -1,0 +1,36 @@
+{
+  "name": "calorietracker",
+  "version": "1.0.0",
+  "description": "Backend for calorie tracker",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnkitSalian/CalorieTracker.git"
+  },
+  "author": "Ankit Salian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnkitSalian/CalorieTracker/issues"
+  },
+  "homepage": "https://github.com/AnkitSalian/CalorieTracker#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-rate-limit": "^5.3.0",
+    "helmet": "^4.6.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.1",
+    "nodemon": "^2.0.12"
+  }
+}
