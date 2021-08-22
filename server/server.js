@@ -16,7 +16,7 @@ dotenv.config({ path: './config/config.env' });
 
 //Router
 const auth = require('./router/auth');
-const calorie = require('./router/calorie');
+const food = require('./router/food');
 
 const app = express();
 
@@ -50,7 +50,7 @@ app.use(cors());
 
 //Mount router
 app.use('/api/v1/auth', auth);
-app.use('/api/v1/calorie', calorie);
+app.use('/api/v1/food', food);
 
 app.use(errorHandler);
 

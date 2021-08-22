@@ -20,7 +20,6 @@ exports.protect = asyncHandler(async (req, res, next) => {
     try {
         //Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('decoded', decoded);
         req.body.email = decoded.email;
         next();
     } catch (error) {
