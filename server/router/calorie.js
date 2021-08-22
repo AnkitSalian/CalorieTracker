@@ -9,7 +9,7 @@ router.post('/add', protect, addFood);
 
 router.patch('/update/:foodId', protect, updateFood);
 
-router.delete('/delete:foodId', protect, deleteFood);
+router.delete('/delete/:foodId', protect, deleteFood);
 
 //router.get('', protect, fetchFood );
 

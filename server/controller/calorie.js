@@ -44,7 +44,7 @@ exports.addFood = asyncHandler(async (req, res, next) => {
 })
 
 // @desc     Register user
-// @route    POST /api/v1/calorie/update/:id
+// @route    PATCH /api/v1/calorie/update/:id
 // @access   private
 exports.updateFood = asyncHandler(async (req, res, next) => {
     const { email, date, whichFood, calorie } = req.body;
@@ -93,7 +93,42 @@ exports.updateFood = asyncHandler(async (req, res, next) => {
 
 })
 
+// @desc     Register user
+// @route    DELETE /api/v1/calorie/delete/:id
+// @access   private
+exports.deleteFood = asyncHandler(async (req, res, next) => {
+    const { email } = req.body;
+    const { foodId } = req.params;
 
-exports.deleteFood = asyncHandler(async(req, res, next) => {
-    // 
+    try {
+        // Fetch user
+        const user = fs.readFileSync(__dirname + "/../data/user.json");
+        const userData = JSON.parse(user);
+
+        let foodObj = userData[email].food.filter(food => food.id === foodId);
+
+        if (foodObj.length === 0) {
+            return next(new ErrorResponse(`${foodId} dont exist`, 400));
+        }
+
+        let foodArray = userData[email].food.filter(food => food.id !== foodId);
+
+        userData[email].food = foodArray;
+
+        fs.writeFile(__dirname + "/../data/user.json", JSON.stringify(userData), (err) => {
+            if (err) {
+                return next(new ErrorResponse('Something went wrong', 500));
+            } else {
+
+                res.status(200).json({
+                    success: true,
+                    data: {}
+                })
+            }
+
+        })
+
+    } catch (error) {
+        return next(new ErrorResponse('Something went wrong', 500));
+    }
 })
