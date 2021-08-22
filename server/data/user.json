@@ -1,1 +1,33 @@
-{"ankitsalian9@gmail.com":{"user_name":"Ankit","email":"ankitsalian9@gmail.com","password":"$2a$10$yfpscey.Lm1gFQjlxBvzs.Qu6J6g3jc/feSztvMVTlPk4ItK49V6i"}}
+{
+    "ankitsalian9@gmail.com": {
+        "user_name": "Ankit",
+        "email": "ankitsalian9@gmail.com",
+        "password": "$2a$10$HIX3O3j2nlarcgMzv43Q8Oe9S9srs.jToTPKEX30c8D7w3itGVxYy",
+        "food": [
+            {
+                "id": "1c35b3a7-e3d5-47e5-8c4f-fd65916fb171",
+                "date": "22/08/2021",
+                "whichFood": "banana",
+                "calorie": 25
+            },
+            {
+                "id": "e7af06c3-e181-4261-9264-6c63a11eed35",
+                "date": "22/08/2021",
+                "whichFood": "banana",
+                "calorie": 25
+            },
+            {
+                "id": "416307c4-82e4-4d9c-a1f4-7bd26603cf3a",
+                "date": "22/08/2021",
+                "whichFood": "chickoo",
+                "calorie": 25
+            },
+            {
+                "id": "0cd5ea74-1839-4e7c-bf36-23f6f4bfe274",
+                "date": "22/08/2021",
+                "whichFood": "pear",
+                "calorie": 45
+            }
+        ]
+    }
+}

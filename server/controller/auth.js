@@ -1,21 +1,15 @@
-const crypto = require('crypto');
 const brcypt = require('bcryptjs');
 const fs = require('fs');
-const jwt = require('jsonwebtoken');
 
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const authMiddleWare = require('../middleware/auth');
-const userJson = require('../data/user.json');
-const { log } = require('console');
 
 // @desc     Register user
 // @route    POST /api/v1/auth/register
 // @access   public
 exports.register = asyncHandler(async (req, res, next) => {
     const { user_name, email, password } = req.body;
-    //Check user_name already exits
-    let user_count;
 
     try {
         const user = fs.readFileSync(__dirname + "/../data/user.json");
