@@ -7,7 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "cd server && nodemon server",
     "client": "cd client && npm start",
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "server-install": "cd server &&  npm i",
+    "client-install": "cd client && npm i",
+    "install": "concurrently --kill-others-on-fail \"npm run server-install\" \"npm run client-install\""
   },
   "repository": {
     "type": "git",
