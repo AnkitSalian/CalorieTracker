@@ -8,10 +8,10 @@ const asyncHandler = require('../middleware/async');
 // @route    POST /api/v1/food/add
 // @access   private
 exports.addFood = asyncHandler(async (req, res, next) => {
-    const { date, whichFood, calorie, email } = req.body;
+    const { date, whichFood, calorie, email, id } = req.body;
 
-    if ((!date || date === null || date === '') || (!whichFood || whichFood === null || whichFood === '') || (!calorie || calorie === null || calorie === 0)) {
-        return next(new ErrorResponse('Please provide date, food and calorie', 400));
+    if ((!date || date === null || date === '') || (!whichFood || whichFood === null || whichFood === '') || (!calorie || calorie === null || calorie === 0) || (!id || id === null || id === '')) {
+        return next(new ErrorResponse('Please provide date, food, calorie and id', 400));
     }
 
     try {
@@ -21,9 +21,11 @@ exports.addFood = asyncHandler(async (req, res, next) => {
 
         // Add new instance of food
         let foodObj = {
-            id: uuidv4(), date, whichFood, calorie
+            id, date, whichFood, calorie, utcDate: new Date(date)
         };
         userData[email].food.push(foodObj);
+
+        let uniqueDate = await calorieTracker(userData[email]);
 
         fs.writeFile(__dirname + "/../data/user.json", JSON.stringify(userData), (err) => {
             if (err) {
@@ -32,7 +34,8 @@ exports.addFood = asyncHandler(async (req, res, next) => {
 
                 res.status(200).json({
                     success: true,
-                    data: foodObj
+                    data: userData[email].food,
+                    calorieTracker: uniqueDate
                 })
             }
 
@@ -79,6 +82,8 @@ exports.updateFood = asyncHandler(async (req, res, next) => {
 
         userData[email].food = foodArray;
 
+        let uniqueDate = await calorieTracker(userData[email]);
+
         fs.writeFile(__dirname + "/../data/user.json", JSON.stringify(userData), (err) => {
             if (err) {
                 return next(new ErrorResponse('Something went wrong', 500));
@@ -86,7 +91,8 @@ exports.updateFood = asyncHandler(async (req, res, next) => {
 
                 res.status(200).json({
                     success: true,
-                    data: foodObj[0]
+                    data: userData[email].food,
+                    calorieTracker: uniqueDate
                 })
             }
 
@@ -121,6 +127,8 @@ exports.deleteFood = asyncHandler(async (req, res, next) => {
 
         userData[email].food = foodArray;
 
+        let uniqueDate = await calorieTracker(userData[email]);
+
         fs.writeFile(__dirname + "/../data/user.json", JSON.stringify(userData), (err) => {
             if (err) {
                 return next(new ErrorResponse('Something went wrong', 500));
@@ -128,7 +136,8 @@ exports.deleteFood = asyncHandler(async (req, res, next) => {
 
                 res.status(200).json({
                     success: true,
-                    data: {}
+                    data: userData[email].food,
+                    calorieTracker: uniqueDate
                 })
             }
 
@@ -150,11 +159,25 @@ exports.fetchFood = asyncHandler(async (req, res, next) => {
         const user = fs.readFileSync(__dirname + "/../data/user.json");
         const userData = JSON.parse(user);
 
+        let uniqueDate = await calorieTracker(userData[email]);
+
         res.status(200).json({
             success: true,
-            data: userData[email].food
+            data: userData[email].food,
+            calorieTracker: uniqueDate
         })
     } catch (error) {
         return next(new ErrorResponse('Something went wrong', 500));
     }
+})
+
+const calorieTracker = asyncHandler(async (userData) => {
+    let uniqueDate = {};
+    for (let i = 0; i < userData.food.length; i++) {
+        if (!Object.keys(uniqueDate).includes(userData.food[i].date)) {
+            uniqueDate[userData.food[i].date] = await 0;
+        }
+        uniqueDate[userData.food[i].date] += await userData.food[i].calorie;
+    }
+    return uniqueDate
 })

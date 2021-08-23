@@ -15,9 +15,14 @@ exports.register = asyncHandler(async (req, res, next) => {
         const user = fs.readFileSync(__dirname + "/../data/user.json");
         const userData = JSON.parse(user);
 
+        if ((user_name === null || user_name === '') || (!email || email === null || email === '') ||
+            (!password || password === null || password === '')) {
+            return next(new ErrorResponse('Please provide an valid name, email and password', 400));
+        }
+
         // Check if user exists
         if (Object.keys(userData).indexOf(email) !== -1) {
-            return next(new ErrorResponse('User already exist, kindly select different user name', 401));
+            return next(new ErrorResponse('User already exist, kindly select different email', 401));
         }
 
         const salt = await brcypt.genSalt(10);
@@ -39,6 +44,7 @@ exports.register = asyncHandler(async (req, res, next) => {
         })
 
     } catch (err) {
+        console.log(err);
         return next(new ErrorResponse('Something went wrong', 500));
     }
 
@@ -51,7 +57,8 @@ exports.login = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
 
     //Validate email and password
-    if (!email || !password) {
+    if ((!email || email === null || email === '') ||
+        (!password || password === null || password === '')) {
         return next(new ErrorResponse('Please provide an email and password', 400));
     }
 
@@ -177,11 +184,28 @@ const sendTokenResponse = (user, statusCode, res) => {
         options.secure = true;
     }
 
+    let uniqueDate = calorieTracker(user);
+
+    delete user.password;
+
     res
         .status(statusCode)
         .cookie('token', token, options)
         .json({
             success: true,
-            token
+            token,
+            userData: user,
+            calorieTracker: uniqueDate
         })
+}
+
+const calorieTracker = (userData) => {
+    let uniqueDate = {};
+    for (let i = 0; i < userData.food.length; i++) {
+        if (!Object.keys(uniqueDate).includes(userData.food[i].date)) {
+            uniqueDate[userData.food[i].date] = 0;
+        }
+        uniqueDate[userData.food[i].date] += userData.food[i].calorie;
+    }
+    return uniqueDate
 }

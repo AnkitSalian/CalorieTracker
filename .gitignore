@@ -107,4 +107,4 @@ dist
 package-lock.json
 
 # Ignore environment variables
-*config.env
+# *config.env
